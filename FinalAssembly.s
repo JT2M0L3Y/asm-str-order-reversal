@@ -27,7 +27,7 @@ _main:
     movl    %eax, 4(%esp)   # move the eax value into allocation of stack memory
     movl    $LC1, (%esp)    # read in the first character
     call    _scanf          # scan function
-    incl    %esi
+    incl    %esi            # increments character count by 1
 
     jmp     L2              # jump to loop comparison
 
@@ -38,17 +38,15 @@ L3:
 	call	_scanf                  # reads in the character
 
     addl    $1, %ebx                # increment the counter
-    incl    %esi 
-    jmp     L2
+    incl    %esi                    # increments character count
+    jmp     L2                      # jump to loop comparison
 L2:
     cmpl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
     jne     L3                      # Jump if not the newline character
-    je      L4                      # Jump if newline character to begin backwards print
+    je      L5                      # Jump if newline character to begin backwards print
 
 L4:
-    cmpl    $0, %eax                # see if we've gone back to beginning of stack
-    jne     L3                      # jump if not base
-    je      L5                      # if found newline character, jump to next step
+    
 
 L5:
     movl    -1(%esi), %r1           # counter for start of word
@@ -57,7 +55,17 @@ L5:
     testl   %r1, %r1                # test to see if end of word
     jle     L6                      # jump if end of word
 
-    cmpb    $32, (%esp, %r1)
+    cmpb    $32, 8(%esp, %r1)       # if word is found
+    jne     L7                      # decrement word start index
+
+    leal    1(%r1), %eax            # set loop index to r1 (word start) + 1
+
+    jmp     L8                      # while not at end of word, jump
 
 L6:
    
+L7:
+    subb    $1, %r1                 # decrement the word start index
+
+L8:
+

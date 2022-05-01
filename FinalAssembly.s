@@ -18,13 +18,13 @@ _main:
     pushl   %ebp            # save value of esp inside of the stack
 
     movl    $LC0, (%esp)    # Asks user for input
-    call    _printf         # prints Enter in any sentence
-
-    movl    $LC1, (%esp)    # gets input from the user
-    call    _scanf          
+    call    _printf         # prints Enter in any sentence        
 
     movl    $0, %ebx        # move 0 to ebx for incrementing
+    movl    $0, %eax
     jmp     L2              # jump to loop comparison
+
+    
 
 L3:
     leal	8(%esp,%ebx), %eax      # A[ebx] into eax
@@ -34,12 +34,8 @@ L3:
 
     addl    $1, %ebx                # increment the counter 
 L2:
-
     cmpl    10, %eax                # compare to ascii value of 10, which is the newline character
-    je      L3                      # Jump if is the newline character
+    jne      L3                      # Jump if is the newline character
 
-
-    
-
-
-
+    leave
+    ret

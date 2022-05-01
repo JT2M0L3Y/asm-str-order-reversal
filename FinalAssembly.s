@@ -17,55 +17,17 @@ _main:
 
     pushl   %ebp            # save value of esp inside of the stack
 
-    movl    $LC0, (%esp)    # Asks user for input
-    call    _printf         # prints Enter in any sentence        
+    pushl   %edi            # push edi to stack
+    pushl   %esi            # push esi to stack
+    pushl   %ebx            # push ebx to stack
 
-    movl    $0, %ebx        # move 0 to ebx for incrementing
-    movl    $0, %eax        # move 0 to eax to ensure we start at right place
-    movl    $0, %esi        # move 0 into esi to count characters
-    leal    8(%esp,%ebx), %eax # load beginning address
-    movl    %eax, 4(%esp)   # move the eax value into allocation of stack memory
-    movl    $LC1, (%esp)    # read in the first character
-    call    _scanf          # scan function
-    incl    %esi            # increments character count by 1
+	subl	$240, %esp      # allocate memory for stack
 
-    jmp     L2              # jump to loop comparison
+    movl    $LC0, (%esp)    # move prompt into stack
+    call    _printf         # print 
 
-L3:
-    leal	8(%esp,%ebx), %eax      # A[ebx] into eax
-	movl	%eax, 4(%esp)           # move the eax value into allocation of stack memory
-	movl	$LC1, (%esp)            # read in the next character
-	call	_scanf                  # reads in the character
+    leal    124(%esp), %ebx # stores address of first array element in base
+    movl    %ebx, (%esp)    # moves address of first array element into stack pointer
+    call    _gets           # reads in until new line character detected
 
-    addl    $1, %ebx                # increment the counter
-    incl    %esi                    # increments character count
-    jmp     L2                      # jump to loop comparison
-L2:
-    cmpl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
-    jne     L3                      # Jump if not the newline character
-    je      L5                      # Jump if newline character to begin backwards print
-
-L4:
-    
-
-L5:
-    movl    -1(%esi), %r1           # counter for start of word
-    movl    -1(%esi), %r2           # counter for end of word
-
-    testl   %r1, %r1                # test to see if end of word
-    jle     L6                      # jump if end of word
-
-    cmpb    $32, 8(%esp, %r1)       # if word is found
-    jne     L7                      # decrement word start index
-
-    leal    1(%r1), %eax            # set loop index to r1 (word start) + 1
-
-    jmp     L8                      # while not at end of word, jump
-
-L6:
-   
-L7:
-    subb    $1, %r1                 # decrement the word start index
-
-L8:
 

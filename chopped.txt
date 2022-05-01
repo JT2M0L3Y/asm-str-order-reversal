@@ -1,0 +1,52 @@
+
+    movl    $LC0, (%esp)    # Asks user for input
+    call    _printf         # prints Enter in any sentence        
+
+    movl    $0, %ebx        # move 0 to ebx for incrementing
+    movl    $0, %eax        # move 0 to eax to ensure we start at right place
+    movl    $0, %esi        # move 0 into esi to count characters
+    leal    8(%esp,%ebx), %eax # load beginning address
+    movl    %eax, 4(%esp)   # move the eax value into allocation of stack memory
+    movl    $LC1, (%esp)    # read in the first character
+    call    _scanf          # scan function
+    incl    %esi            # increments character count by 1
+
+    jmp     L2              # jump to loop comparison
+
+L3:
+
+    leal	8(%esp,%ebx), %eax      # A[ebx] into eax
+	movl	%eax, 4(%esp)           # move the eax value into allocation of stack memory
+	movl	$LC1, (%esp)            # read in the next character
+	call	_scanf                  # reads in the character
+
+    addl    $1, %ebx                # increment the counter
+    incl    %esi                    # increments character count
+    jmp     L2                      # jump to loop comparison
+L2:
+    testl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
+    jne     L3                      # Jump if not the newline character
+
+
+
+L5:
+    movl    -1(%esi), %ecx           # counter for start of word
+    movl    -1(%esi), %edx           # counter for end of word
+
+    testl   %ecx, %ecx                # test to see if end of word
+    jle     L6                      # jump if end of word
+
+    cmpb    $32, 8(%esp, %ecx)       # if word is found
+    jne     L7                      # decrement word start index
+
+    leal    1(%ecx), %eax            # set loop index to r1 (word start) + 1
+
+    jmp     L8                      # while not at end of word, jump
+
+L6:
+   
+L7:
+    subl    $1, %ecx                 # decrement the word start index
+
+L8:
+

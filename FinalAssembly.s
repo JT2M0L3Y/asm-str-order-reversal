@@ -22,9 +22,12 @@ _main:
 
     movl    $0, %ebx        # move 0 to ebx for incrementing
     movl    $0, %eax        # move 0 to eax to ensure we start at right place
+    leal    8(%esp,%ebx), %eax # load beginning address
+    movl    %eax, 4(%esp)   # move the eax value into allocation of stack memory
+    movl    $LC1, (%esp)    # read in the first character
+    call    _scanf          # scan function
 
     jmp     L2              # jump to loop comparison
-
 
 L3:
     leal	8(%esp,%ebx), %eax      # A[ebx] into eax
@@ -35,8 +38,8 @@ L3:
     addl    $1, %ebx                # increment the counter 
     jmp     L2
 L2:
-    cmpb    0x0a, %al                # compare to ascii value of 10, which is the newline character
-    jne      L3                      # Jump if is the newline character
+    cmpl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
+    jne     L3                      # Jump if is the newline character
 
     leave
     ret

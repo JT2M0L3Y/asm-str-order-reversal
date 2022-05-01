@@ -92,11 +92,8 @@ L7:
 	leal	-12(%ebp), %esp
 
 	popl	%ebx
-
 	popl	%esi
-
 	popl	%edi
-
 	popl	%ebp
 
 	ret

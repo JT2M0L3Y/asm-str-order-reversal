@@ -54,5 +54,7 @@ L4:
 
 L5:
     subl    8(%esp, %ebx), %eax
+    subl    $1, %ebx
     call    _printf
     jmp     L4
+   

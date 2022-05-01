@@ -5,8 +5,7 @@
 LC0:
     .ascii "Enter in any sentence: \0"
 LC1:
-    .ascii "%[^\n]\0"
-
+    .ascii "%c\0"
 
     .globl _main
     .def    _main;  .scl    2;  .type   32; .endef
@@ -27,20 +26,20 @@ _main:
     movl    $0, %ebx        # move 0 to ebx for incrementing
     jmp     L2              # jump to loop comparison
 
-
 L3:
-    movl    %eax, 8(%esp)
-    movl    %eax, %edi
+    leal	8(%esp,%ebx), %eax      # A[ebx] into eax
+	movl	%eax, 4(%esp)           # move the eax value into allocation of stack memory
+	movl	$LC1, (%esp)            # read in the next character
+	call	_scanf                  # reads in the character
 
+    addl    $1, %ebx                # increment the counter 
 L2:
-    leal    4(%esp,%ebx), %eax
-    cmpl    10, %edi
-    je      L3
 
-    movl    %edi, (%esp)
-    call    _printf
+    cmpl    10, %eax                # compare to ascii value of 10, which is the newline character
+    je      L3                      # Jump if is the newline character
 
 
+    
 
 
 

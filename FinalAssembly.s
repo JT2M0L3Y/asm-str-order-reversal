@@ -39,7 +39,20 @@ L3:
     jmp     L2
 L2:
     cmpl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
-    jne     L3                      # Jump if is the newline character
+    jne     L3                      # Jump if not the newline character
+    je      L4                      # Jump if newline character to begin backwards print
 
     leave
     ret
+
+L4:
+    cmpl    $0, %eax                # see if we've gone back to beginning of stack
+    jne     L5                      # jump if not base
+
+    leave
+    ret
+
+L5:
+    subl    8(%esp, %ebx), %eax
+    call    _printf
+    jmp     L4

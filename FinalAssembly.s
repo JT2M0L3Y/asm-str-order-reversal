@@ -21,10 +21,10 @@ _main:
     call    _printf         # prints Enter in any sentence        
 
     movl    $0, %ebx        # move 0 to ebx for incrementing
-    movl    $0, %eax
+    movl    $0, %eax        # move 0 to eax to ensure we start at right place
+
     jmp     L2              # jump to loop comparison
 
-    
 
 L3:
     leal	8(%esp,%ebx), %eax      # A[ebx] into eax
@@ -33,8 +33,9 @@ L3:
 	call	_scanf                  # reads in the character
 
     addl    $1, %ebx                # increment the counter 
+    jmp     L2
 L2:
-    cmpl    10, %eax                # compare to ascii value of 10, which is the newline character
+    cmpb    0x0a, %al                # compare to ascii value of 10, which is the newline character
     jne      L3                      # Jump if is the newline character
 
     leave

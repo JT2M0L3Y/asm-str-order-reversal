@@ -29,10 +29,18 @@ _main:
 
 
 L3:
-
-
+    movl    %eax, 8(%esp)
+    movl    %eax, %edi
 
 L2:
-    li      $t1, 10
-    beq     $t0, $t1, L3
+    leal    4(%esp,%ebx), %eax
+    cmpl    10, %edi
+    je      L3
+
+    movl    %edi, (%esp)
+    call    _printf
+
+
+
+
 

@@ -22,10 +22,12 @@ _main:
 
     movl    $0, %ebx        # move 0 to ebx for incrementing
     movl    $0, %eax        # move 0 to eax to ensure we start at right place
+    movl    $0, %esi        # move 0 into esi to count characters
     leal    8(%esp,%ebx), %eax # load beginning address
     movl    %eax, 4(%esp)   # move the eax value into allocation of stack memory
     movl    $LC1, (%esp)    # read in the first character
     call    _scanf          # scan function
+    incl    %esi
 
     jmp     L2              # jump to loop comparison
 
@@ -35,26 +37,27 @@ L3:
 	movl	$LC1, (%esp)            # read in the next character
 	call	_scanf                  # reads in the character
 
-    addl    $1, %ebx                # increment the counter 
+    addl    $1, %ebx                # increment the counter
+    incl    %esi 
     jmp     L2
 L2:
     cmpl    0x0a, %eax              # compare to ascii value of 10, which is the newline character
     jne     L3                      # Jump if not the newline character
     je      L4                      # Jump if newline character to begin backwards print
 
-    leave
-    ret
-
 L4:
     cmpl    $0, %eax                # see if we've gone back to beginning of stack
-    jne     L5                      # jump if not base
-
-    leave
-    ret
+    jne     L3                      # jump if not base
+    je      L5                      # if found newline character, jump to next step
 
 L5:
-    subl    8(%esp, %ebx), %eax
-    subl    $1, %ebx
-    call    _printf
-    jmp     L4
+    movl    -1(%esi), %r1           # counter for start of word
+    movl    -1(%esi), %r2           # counter for end of word
+
+    testl   %r1, %r1                # test to see if end of word
+    jle     L6                      # jump if end of word
+
+    cmpb    $32, (%esp, %r1)
+
+L6:
    

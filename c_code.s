@@ -40,30 +40,33 @@ _main:
 L5:
 	movzbl	124(%esp,%eax), %ecx
 	movb	%cl, 24(%esp,%edx)
+	# increment i and index
 	addl	$1, %eax
 	addl	$1, %edx
 L4:
-	cmpl	%ebx, %eax								# comparison->outer loop
+	cmpl	%ebx, %eax								# inner loop
 	
 	jle	L5
 	
 	movb	$32, 24(%esp,%edx)
+	# 
 	leal	-1(%esi), %ebx
 	leal	1(%edx), %edx
 L3:
+	# word start decrement
 	subl	$1, %esi
 L2:
-	testl	%esi, %esi                              # if statement
+	testl	%esi, %esi                              # outer loop comparison (C_code line 23)
 	
-	jle	L10
+	jle	L10									        # end of loop (jump to line 46 in C_code)
 	
-	cmpb	$32, 124(%esp,%esi)						# comparison->inner loop
+	cmpb	$32, 124(%esp,%esi)						# if statement
 	
-	jne	L3
+	jne	L3 										        # jump to word start decrement (line 42)
 	
-	leal	1(%esi), %eax
+	leal	1(%esi), %eax                           # set i to wordStart + 1 (line 29 C_code)
 	
-	jmp	L4
+	jmp	L4									        # jump to inner loop (line 30 C_code)
 
 L10:
 	movl	$0, %eax
@@ -73,6 +76,7 @@ L10:
 L8:
 	movzbl	124(%esp,%eax), %ecx
 	movb	%cl, 24(%esp,%edx)
+	# increment i and index vars
 	addl	$1, %edx
 	addl	$1, %eax
 L7:

@@ -8,7 +8,7 @@ LC1:
     .ascii "%c\0"
 
     .globl _main
-    .def    _main;  .scl    2;  .type   32; .endef
+    .def    _main
 
 _main:
 
@@ -35,6 +35,9 @@ _main:
 L2: 
     call    _printf
 
+    leave
+    ret
+
 L1:
     movl    %ebx, %edi      # move address of first array element to the destination index register
     movl    $0, %eax        # move 0 as start of array index counter
@@ -42,6 +45,7 @@ L1:
 
     repnz   scasl           # making sure input was entered (input is non zero in length)
 
+    jmp     L2
     
 
     

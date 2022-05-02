@@ -30,4 +30,20 @@ _main:
     movl    %ebx, (%esp)    # moves address of first array element into stack pointer
     call    _gets           # reads in until new line character detected
 
+    jmp     L1
+
+L2: 
+    call    _printf
+
+L1:
+    movl    %ebx, %edi      # move address of first array element to the destination index register
+    movl    $0, %eax        # move 0 as start of array index counter
+    movl    $-1, %ecx       # move -1 as a safeguard into the loop counter
+
+    repnz   scasl           # making sure input was entered (input is non zero in length)
+
+   
+
+    
+
 

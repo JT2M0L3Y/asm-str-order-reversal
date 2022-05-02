@@ -29,6 +29,7 @@ _main:
 	movl	$-1, %ecx
 	movl	%ebx, %edi
 	repnz scasb
+	
 	movl	%ecx, %eax
 	notl	%eax
 	leal	-2(%eax), %esi

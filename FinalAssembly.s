@@ -42,7 +42,7 @@ L1:
 
     repnz   scasl           # making sure input was entered (input is non zero in length)
 
-   
+    
 
     
 

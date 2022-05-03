@@ -1,4 +1,8 @@
-
+# Mason Manca, Jonathan Smoley, and Sam Berkson
+# Group 6
+# 
+# 3 May 2020
+								# The eax register represents our initial array, and edx represents our reversed array
 LC0:
 	.ascii "Enter any string: \0"
 LC1:
@@ -7,22 +11,23 @@ LC2:
 	.ascii "Reverse ordered words \12%s\0"
 
 	.globl	_main
-	.def	_main;	.scl	2;	.type	32;	.endef
+	.def	_main;
 
 _main:
 
-	pushl	%ebp
+	pushl	%ebp   				# Standard calle entrance
 
-	movl	%esp, %ebp
+	movl	%esp, %ebp 			# moves the top of stack pointer to the base pointer
 
-	andl	$-16, %esp
-	subl	$80, %esp
+	subl	$80, %esp			# allocate memory for the stack
 
-	movl	$LC0, (%esp)
-	call	_printf
-	leal	40(%esp), %eax
-	movl	%eax, (%esp)
-	call	_gets
+	movl	$LC0, (%esp)		# call text function
+	call	_printf				# print text
+
+	leal	40(%esp), %eax		# Assume an array of less than 20, and move eax halfway up the stack since we have 2 arrays 
+	movl	%eax, (%esp)		# move eax into stack p
+
+	call	_gets				# read in characters until reaching a '\n'
 
 	leal	40(%esp), %eax
 	movl	%eax, (%esp)

@@ -6,10 +6,9 @@
 								# The eax register represents our initial array, and edx represents our reversed array
 LC0:
 	.ascii "Enter any string: \0"
+
 LC1:
-	.ascii "Original string \12%s\12\12\0"
-LC2:
-	.ascii "Reverse ordered words \12%s\0"
+	.ascii "Reverse ordered words: %s\0"
 
 	.globl	_main
 	.def	_main;
@@ -20,7 +19,7 @@ _main:
 
 	movl	%esp, %ebp 			# moves the top of stack pointer to the base pointer
 
-	subl	$80, %esp			# allocate memory for the stack
+	andl	$-80, %esp			# allocate memory for the stack
 
 	movl	$LC0, (%esp)		# call text function
 	call	_printf				# print text
@@ -102,38 +101,39 @@ L2:
 	jmp	L7						# jump to loop comparison
 
 L8:
-	leal	40(%esp), %edx
-	movl	76(%esp), %eax
-	addl	%edx, %eax
-	movl	(%eax), %eax
-	leal	20(%esp), %ecx
-	movl	72(%esp), %edx
-	addl	%ecx, %edx
-	movb	%al, (%edx)
+	leal	40(%esp), %edx		# getting original array
+	movl	76(%esp), %eax		# move i into eax 
+	addl	%edx, %eax			# str[i] 
+
+	movl	(%eax), %eax		# get the elemend inside of str[i]
+	leal	20(%esp), %ecx		# 20%esp is reversedArray[], store it in ecx
+	movl	72(%esp), %edx		# move index into edx
+
+	addl	%ecx, %edx			# reversedArray[index]
+	movb	%al, (%edx)			# reversedArray[index] = str[i]
 
 	addl	$1, 72(%esp)		# 72(%esp) tracks index in our loop
 	addl	$1, 76(%esp)		# 76(%esp) tracks the i in the array
 L7:
-	movl	76(%esp), %eax
-	cmpl	64(%esp), %eax
-	jle	L8
+	movl	76(%esp), %eax		# move i into eax
+	cmpl	64(%esp), %eax		# compare wordEnd and i 
+	jle	L8						# jump to loop body if less than or equal
 
-	leal	20(%esp), %edx
-	movl	72(%esp), %eax
-	addl	%edx, %eax
-	movb	$0, (%eax)
-	leal	40(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$LC1, (%esp)
-	call	_printf
-	leal	20(%esp), %eax
-	movl	%eax, 4(%esp)
-	movl	$LC2, (%esp)
-	call	_printf
-	movl	$0, %eax
+	leal	20(%esp), %edx		# reversedArray into edx
+	movl	72(%esp), %eax		# index into eax
+	addl	%edx, %eax			# reversedArray[index]
 
+	movb	$0, (%eax)			# Adding null character to the end of reverse[index]
 
-	leave
+	leal	20(%esp), %eax		# move reversedArray to eax
+	movl	%eax, 4(%esp)		# move array to 4 + esp, so we print LC1 first
+
+	movl	$LC1, (%esp)		# move LC1 function to the top of the stack
+	call	_printf				# Print that business
+
+	subl	$80, %esp			# deallocate memory
+	
+	leave						
 
 	ret
 

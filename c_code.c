@@ -3,17 +3,16 @@
  */
 #include <stdio.h>
 #include <string.h>
-#define MAX_SIZE 100 // Maximum string size
 
 int main()
 {
-    char str[100], reverse[100];
+    char str[20], reverse[20];
     int len, i, index, wordStart, wordEnd;
 
     printf("Enter any string: ");
     gets(str);
 
-    len   = strlen(str);
+    len = strlen(str);
     index = 0;
 
     // Start checking of words from the end of string
@@ -26,26 +25,27 @@ int main()
         if(str[wordStart] == ' ')
         {
             // Add the word to the reverse string
-            i = wordStart + 1;
+            i = wordStart + 1; //goes to first character of the word
+
             while(i <= wordEnd)
             {
-                reverse[index] = str[i];
+                reverse[index] = str[i]; // adds the characters until the end of the given word
 
-                i++;
+                i++;        //increments i and index in order to progress through the word
                 index++;
             }
-            reverse[index++] = ' ';
+            reverse[index++] = ' '; // makes a space after the word 
 
-            wordEnd = wordStart - 1;
+            wordEnd = wordStart - 1; // goes back to the space before the initial word
         }
 
-        wordStart--;
+        wordStart--;    //decrements and then continues backwards through the given sentence
     }
 
     // Finally add the last word
     for(i=0; i<=wordEnd; i++)
     {
-        reverse[index] = str[i];
+        reverse[index] = str[i]; //add the first word in str[] to the end of reverse because there will not be a space to detect
         index++;
     }
 
